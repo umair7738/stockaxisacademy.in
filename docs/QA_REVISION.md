@@ -6,7 +6,7 @@ This is the current QA record. `QA_CHECKLIST.md` retains the initial implementat
 
 Removed the review utility strip and footer development label. Removed delivery-provider wording from visible form text. The form integration and launch/content gates remain unchanged.
 
-All same-page links now share an explicit requestAnimationFrame scroll tween (650–1,250ms, distance-based easing), fixed-header offset, URL updates and destination focus. The up-arrow includes an SVG progress ring; it fills on scroll, drains during return and resets at the actual page top. Native wheel/touch scrolling is preserved, deliberate input interrupts the tween, and reduced motion/skip links stay immediate. AOS reveals now use a 500ms cubic easing curve.
+All same-page links now share an explicit requestAnimationFrame scroll tween (850–1,500ms in the default mode, with a shorter gentle reduced-motion mode), fixed-header offset, URL updates and destination focus. The up-arrow includes an SVG progress ring; it fills on scroll, drains during return and resets at the actual page top. Native wheel/touch scrolling is preserved, deliberate input interrupts the tween, and skip links stay immediate. AOS reveals use an 850ms cubic easing curve with a 52px fade-up, blur-to-sharp transition and 90ms stagger.
 
 Targeted browser checks: **15 assertions passed**, including measured intermediate positions for both section navigation and the up-arrow (no instant jump), ring fill/reset, topic preservation, heading offset, focus/history, wheel cancellation, mobile menu closure, reduced motion and clean page copy. All six widths (320–1440px) fit. Axe reported **zero violations** at 390px and 1440px. Commands used `playwright-cli -s=stockaxis run-code --filename output/playwright/scroll-qa.js --json`; results and screenshots are in `scroll-results.json`, `scroll-progress.png` and `smooth-hero-*.png` in that directory. Static checks and review export passed. Lighthouse was not rerun for this refinement; scores below belong to the preceding reference-driven revision.
 
@@ -21,9 +21,9 @@ The reference was treated as source material, not a new instruction file. Its Em
 
 ## Checks run and results
 
-`node scripts/check.mjs`: PASS — 43 unique IDs, all local assets and anchor targets, exact brand tokens, eight AA text-color calculations, form/consent/honeypot configuration, both logo placements, AOS and fixed up-arrow.
+`node scripts/check.mjs`: PASS — 44 unique IDs, all local assets and anchor targets, exact brand tokens, eight AA text-color calculations, form/consent/honeypot configuration, both logo placements, AOS and fixed up-arrow.
 
-`node --check` on `main.js`, `site-content.js`, `navigation-boot.js`, `contact-form.js` and `motion.js`: PASS. `node scripts/build.mjs`: PASS. `node scripts/build.mjs --production`: expected refusal while client approvals, delivery verification, provider-side CAPTCHA, confirmed courses and domain are outstanding.
+`node --check assets/js/index.js`: PASS. `node scripts/build.mjs`: PASS. `node scripts/build.mjs --production`: expected refusal while client approvals, delivery verification, provider-side CAPTCHA, confirmed courses and domain are outstanding.
 
 Browser command used the existing local Playwright CLI installation:
 

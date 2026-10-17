@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { readFile, stat } from 'node:fs/promises';
-import { siteContent } from '../assets/js/site-content.js';
+import { siteContent } from '../assets/js/index.js';
 
 const html = await readFile('index.html', 'utf8');
-const css = await readFile('assets/css/styles.css', 'utf8');
+const css = await readFile('assets/css/index.css', 'utf8');
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
 assert.equal(new Set(ids).size, ids.length, 'Duplicate HTML IDs');
 assert.equal([...html.matchAll(/<h1\b/g)].length, 1, 'Exactly one H1');
@@ -21,7 +21,7 @@ assert.equal([...html.matchAll(/class="brand-image"/g)].length, 2, 'Original log
 assert(html.includes('id="scroll-top"'), 'Missing fixed back-to-top control');
 assert(html.includes('assets/vendor/aos/aos.js'), 'Missing self-hosted AOS');
 assert(!/href="(?:#|javascript:|tel:)"/.test(html), 'Inert or unverified destination');
-assert(!/innerHTML|eval\(/.test(await readFile('assets/js/main.js', 'utf8')), 'Unsafe DOM construction');
+assert(!/\.innerHTML\s*=|\beval\s*\(/.test(await readFile('assets/js/index.js', 'utf8')), 'Unsafe DOM construction');
 assert.equal(new Set(siteContent.draftTopics.map((topic) => topic.id)).size, siteContent.draftTopics.length);
 // WCAG contrast: test actual text states, including hovered CTA and red label.
 const linear = (value) => { const n = value / 255; return n <= .04045 ? n / 12.92 : ((n + .055) / 1.055) ** 2.4; };

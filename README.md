@@ -27,13 +27,8 @@ The default build puts a **noindex design review** in `dist/`. Do not publish th
 | File | Purpose |
 | --- | --- |
 | `index.html` | Semantic page, editorial copy, FAQ answers and disclaimer |
-| `assets/css/styles.css` | Exact brand tokens, responsive layouts, typography, focus and motion |
-| `assets/js/site-content.js` | Review mode, draft topics, verified courses, mentor, contact and approval settings |
-| `assets/js/main.js` | Mobile menu, selected topic, verified-channel links, active navigation and opt-in event adapter |
-| `assets/js/navigation-boot.js` | Tiny early enhancement marker to prevent header layout shift, with native navigation fallback if modules fail |
-| `assets/js/contact-form.js` | EmailJS delivery, accessible validation, sending/error/success states, consent and anti-spam checks |
-| `assets/js/motion.js` | AOS setup, reduced-motion preferences, visible-content fallback and focus handling |
-| `assets/js/scroll.js` | Shared eased section/back-to-top scrolling, interruption, header offset, focus/history and SVG scroll-progress ring |
+| `assets/css/index.css` | Exact brand tokens, responsive layouts, typography, focus and motion |
+| `assets/js/index.js` | Consolidated editable source for content gates, mobile menu, contact form, AOS reveals, navigation and eased scroll controls |
 | `assets/vendor/aos/` | Self-hosted AOS 2.3.4 and its MIT license |
 | `assets/img/market-study.svg` | Original conceptual market illustration; no data feed |
 | `assets/stock-axis-logo-original.png` | Unmodified client logo, intentionally framed against black |
@@ -47,8 +42,8 @@ The default build puts a **noindex design review** in `dist/`. Do not publish th
 ## Add real client information
 
 1. Work through `docs/CONTENT_REQUIRED.md`. Obtain approved copy; replace review references throughout the HTML, including FAQs, About and the no-JavaScript course fallback. Approval flags are attestations after editorial review, not automatic verification.
-2. Add confirmed courses to `courses` in `site-content.js`. Each needs a unique `id`, `title`, `level`, `description`, `subjects`, `duration` and `mode`. Draft themes live in a separate array and are selected only in review mode.
-3. Verify the existing EmailJS service/template in the client dashboard: recipient, template field mapping, account quota and allowed production origin. The old reference's public browser configuration is already in `enquiry` in `site-content.js`; no private key is used. After a real delivery check, set `enquiry.deliveryVerified` to true. Configure a reCAPTCHA v2 site key in `enquiry.captchaSiteKey`, enable verification in the EmailJS template and set `captchaEnabledInTemplate` after checking it. The CAPTCHA secret belongs only in EmailJS. The production build requires these checks for an enabled form. Direct WhatsApp and email links remain optional; enable them only after verifying ownership using `contactsVerified`.
+2. Add confirmed courses to `content.courses` in `assets/js/index.js`. Each needs a unique `id`, `title`, `level`, `description`, `subjects`, `duration` and `mode`. Draft themes live in a separate array and are selected only in review mode.
+3. Verify the existing EmailJS service/template in the client dashboard: recipient, template field mapping, account quota and allowed production origin. The old reference's public browser configuration is already in `content.enquiry` in `assets/js/index.js`; no private key is used. After a real delivery check, set `enquiry.deliveryVerified` to true. Configure a reCAPTCHA v2 site key in `enquiry.captchaSiteKey`, enable verification in the EmailJS template and set `captchaEnabledInTemplate` after checking it. The CAPTCHA secret belongs only in EmailJS. The production build requires these checks for an enabled form. Direct WhatsApp and email links remain optional; enable them only after verifying ownership using `contactsVerified`.
 4. Add a mentor only with an approved name, role and bio. Add photos or testimonials only with permission. There are no fictional profiles to replace.
 5. Set the confirmed HTTPS origin in `domain`. The repository folder name is not treated as domain ownership confirmation. Set approved `seo.title`, `seo.description` and `seo.socialDescription`.
 6. After client sign-off, set `positioningApproved`, `pageCopyApproved`, `legalApproved` to true and `reviewMode` to false. Review audience, legal/policy requirements and the privacy implications of external contact services. Add approved policy content and real destinations when supplied.

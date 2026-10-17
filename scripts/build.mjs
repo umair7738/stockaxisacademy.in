@@ -1,5 +1,5 @@
 import { mkdir, cp, readFile, writeFile, unlink } from 'node:fs/promises';
-import { siteContent as content } from '../assets/js/site-content.js';
+import { siteContent as content } from '../assets/js/index.js';
 import './check.mjs';
 
 const production = process.argv.includes('--production');
