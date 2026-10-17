@@ -14,7 +14,7 @@ if (typeof document !== 'undefined') {
  * Keep reviewMode true until the checklist in docs/CONTENT_REQUIRED.md is approved.
  * Never add invented details. Text is rendered with textContent, never innerHTML.
  */
-const siteContent = {
+const content = {
   reviewMode: true,
   domain: null,
   positioningApproved: false,
@@ -60,7 +60,7 @@ function setupContactForm({ config, interest, emit }) {
   let lastSentAt = 0;
   let startedAt = Date.now();
   let widgetId;
-  const configured = config?.enabled && config.serviceId && config.templateId && config.publicKey;
+  const configured = config?.enabled && config.deliveryVerified && config.serviceId && config.templateId && config.publicKey;
   const say = (message, state = 'error', focus = false) => {
     feedback.textContent = message;
     feedback.dataset.state = state;
@@ -515,5 +515,4 @@ setupPageScroll({ closeMenu: () => setMenu(false) });
 setupScrollMotion();
 }
 
-export { siteContent };
-
+export { content as siteContent };
