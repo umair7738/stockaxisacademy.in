@@ -11,7 +11,7 @@ if (typeof document !== 'undefined') {
 
 
 /* CLIENT CONTENT GATE: all unconfirmed business facts belong here.
- * Keep reviewMode true until the checklist in docs/CONTENT_REQUIRED.md is approved.
+ * Keep reviewMode true until the client approves the final content.
  * Never add invented details. Text is rendered with textContent, never innerHTML.
  */
 const content = {
