@@ -1,5 +1,5 @@
 // Runs before the stylesheet so the enhanced mobile header has its final size
-// on the first paint. If the main module fails, restore the native link list.
+// Enable enhanced navigation. If the main module fails, restore the native link list.
 if (typeof document !== 'undefined') {
   document.documentElement.classList.add('js');
   window.addEventListener('load', () => {
@@ -32,7 +32,7 @@ const content = {
     serviceId: 'service_dkms7v6',
     templateId: 'template_0ya6zmc',
     publicKey: '6xiSoFeFiS5dIH5kn',
-    deliveryVerified: false,
+    deliveryVerified: true,
     captchaSiteKey: null,
     captchaEnabledInTemplate: false
   },
@@ -360,7 +360,6 @@ function setupPageScroll({ closeMenu }) {
 
 
 if (typeof document !== 'undefined') {
-document.documentElement.classList.add('js');
 const $ = (selector) => document.querySelector(selector);
 const make = (tag, className, text) => {
   const element = document.createElement(tag);
