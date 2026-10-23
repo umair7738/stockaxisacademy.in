@@ -50,11 +50,11 @@ const content = {
 
 const EMAILJS_ENDPOINT = 'https://api.emailjs.com/api/v1.0/email/send';
 
-function setupContactForm({ config, interest, emit }) {
-  const form = document.querySelector('#contact-form');
+function setupContactForm({ config, interest, emit, form = document.querySelector('#contact-form'), location = 'contact' }) {
+  if (!form) return;
   const button = form.querySelector('[type="submit"]');
   const label = button.querySelector('.submit-label');
-  const feedback = document.querySelector('#form-feedback');
+  const feedback = form.querySelector('[data-form-feedback]') || form.querySelector('#form-feedback');
   const field = (name) => form.elements.namedItem(name);
   let sending = false;
   let lastSentAt = 0;
@@ -101,7 +101,7 @@ function setupContactForm({ config, interest, emit }) {
 
   // Optional reCAPTCHA v2: its secret stays in EmailJS, never in this site.
   if (config.captchaSiteKey) {
-    const container = document.querySelector('#captcha-container');
+    const container = form.querySelector('.captcha-container');
     container.hidden = false;
     window.stockAxisCaptchaReady = () => {
       widgetId = window.grecaptcha.render(container, { sitekey: config.captchaSiteKey, theme: 'dark', size: 'compact' });
@@ -137,7 +137,7 @@ function setupContactForm({ config, interest, emit }) {
     say('Sending your enquiry…', 'sending');
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000);
-    const selectedTopic = interest.options[interest.selectedIndex].textContent;
+    const selectedTopic = interest ? interest.options[interest.selectedIndex].textContent : 'General course information';
     try {
       const response = await fetch(EMAILJS_ENDPOINT, {
         method: 'POST',
@@ -163,11 +163,13 @@ function setupContactForm({ config, interest, emit }) {
       if (response.status === 429) throw new Error('rate-limit');
       if (response.status !== 200 || (await response.text()).trim() !== 'OK') throw new Error('delivery');
       lastSentAt = Date.now();
-      emit('lead_submit_success', { topic: interest.value, location: 'contact' });
-      const topic = interest.value;
+      emit('lead_submit_success', { topic: interest?.value || 'general', location });
+      const topic = interest?.value;
       form.reset();
-      interest.value = topic;
-      interest.dispatchEvent(new Event('change'));
+      if (interest) {
+        interest.value = topic;
+        interest.dispatchEvent(new Event('change'));
+      }
       say('Thank you. Your enquiry was sent. The academy can reply using the contact details you provided.', 'success', true);
     } catch (error) {
       say(error.message === 'rate-limit'
@@ -488,6 +490,40 @@ function updateInterest() {
 interest.addEventListener('change', updateInterest);
 updateInterest();
 setupContactForm({ config: content.enquiry, interest, emit });
+
+function setupContactPopup() {
+  const popup = $('#contact-popup');
+  const popupForm = $('#popup-contact-form');
+  if (!popup || !popupForm) return;
+  let lastFocused;
+  const close = () => {
+    popup.hidden = true;
+    document.body.classList.remove('popup-open');
+    lastFocused?.focus();
+  };
+  const open = () => {
+    lastFocused = document.activeElement;
+    popup.hidden = false;
+    document.body.classList.add('popup-open');
+    popup.querySelector('input[name="name"]')?.focus();
+  };
+  popup.addEventListener('click', (event) => {
+    if (event.target.closest('[data-popup-close]')) close();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (popup.hidden) return;
+    if (event.key === 'Escape') { event.preventDefault(); close(); }
+    if (event.key === 'Tab') {
+      const focusable = [...popup.querySelectorAll('button, input, textarea, [href]')].filter((element) => !element.disabled);
+      const first = focusable[0], last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+  });
+  setupContactForm({ config: content.enquiry, emit, form: popupForm, location: 'popup' });
+  window.setTimeout(open, 700);
+}
+setupContactPopup();
 if (content.mentor) {
   const mentor = $('#mentor-content');
   mentor.replaceChildren(make('h3', '', content.mentor.name), make('p', 'chapter-label', content.mentor.role), make('p', 'content-note', content.mentor.bio));
