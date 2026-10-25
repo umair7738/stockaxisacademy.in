@@ -160,6 +160,29 @@ p {
   transform:none
 }
 
+/* A quiet reading indicator that mirrors the academy's emerald accent. */
+.page-progress {
+  position:fixed;
+  top:var(--header-height);
+  right:0;
+  left:0;
+  z-index:50;
+  height:3px;
+  background:color-mix(in srgb,var(--border) 72%,transparent);
+  pointer-events:none
+}
+
+.page-progress span {
+  display:block;
+  width:100%;
+  height:100%;
+  background:var(--bull);
+  box-shadow:0 0 10px color-mix(in srgb,var(--bull) 58%,transparent);
+  transform:scaleX(0);
+  transform-origin:left center;
+  will-change:transform
+}
+
 .status-dot {
   display:inline-block;
   width:6px;
@@ -1946,6 +1969,7 @@ html.aos-ready [data-aos-delay="180"] { transition-delay: 180ms; }
   .contact-popup__dialog { max-height:calc(100vh - 24px); padding:22px 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .page-progress span { transition:none; }
   html.aos-ready [data-aos].aos-init { transition: opacity 420ms ease !important; }
   html.aos-ready [data-aos="fade-up"].aos-init:not(.aos-animate),
   html.aos-ready [data-aos="zoom-in"].aos-init:not(.aos-animate) { opacity: 0 !important; transform: none !important; }

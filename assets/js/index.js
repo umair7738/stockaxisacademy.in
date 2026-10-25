@@ -271,6 +271,7 @@ function setupPageScroll({ closeMenu }) {
   const header = document.querySelector('.site-header');
   const button = document.querySelector('#scroll-top');
   const progress = document.querySelector('#scroll-progress');
+  const progressLine = document.querySelector('#scroll-progress-line');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let animation = 0;
   let finishAnimation;
@@ -281,6 +282,7 @@ function setupPageScroll({ closeMenu }) {
   function updateProgress() {
     const ratio = Math.min(1, Math.max(0, window.scrollY / scrollRange));
     progress.style.strokeDashoffset = String(100 * (1 - ratio));
+    progressLine.style.transform = `scaleX(${ratio})`;
     button.hidden = window.scrollY < 320 && !root.classList.contains('scrolling-to-top');
     ticking = false;
   }
@@ -357,6 +359,8 @@ function setupPageScroll({ closeMenu }) {
   window.addEventListener('pageshow', () => { measure(); scheduleProgress(); });
   if ('ResizeObserver' in window) new ResizeObserver(() => { measure(); scheduleProgress(); }).observe(document.body);
   reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) finishAnimation?.(); });
+  measure();
+  scheduleProgress();
 }
 
 
