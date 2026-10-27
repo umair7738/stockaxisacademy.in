@@ -1,3 +1,4 @@
-# Design review: indexing is intentionally blocked until client sign-off.
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://stockaxisacademy.in/sitemap.xml
