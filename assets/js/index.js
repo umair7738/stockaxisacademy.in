@@ -446,16 +446,11 @@ topics.forEach((course, index) => {
   link.href = '#contact';
   link.setAttribute('aria-label', `Ask about ${course.title}`);
   link.addEventListener('click', () => {
-    interest.value = course.id;
-    updateInterest();
     emit('cta_course_click', { topic: course.id, location: 'courses' });
     emit('cta_enquiry_click', { topic: course.id, location: 'courses' });
   });
   article.append(heading, description, link);
   courseList.append(article);
-  const option = make('option', '', course.title);
-  option.value = course.id;
-  interest.append(option);
 });
 
 const validWhatsapp = content.contactsVerified && /^\d{8,15}$/.test(content.whatsapp || '') ? content.whatsapp : null;
@@ -485,11 +480,12 @@ if (validWhatsapp || validEmail) {
   }
 }
 function updateInterest() {
-  const topic = topics.find((course) => course.id === interest.value);
+  const selectedOption = interest.options[interest.selectedIndex];
+  const topic = selectedOption?.textContent.trim();
   $('#interest-feedback').textContent = topic
-    ? `Your interest: ${topic.title} Ask about the syllabus, level, format and schedule.`
+    ? `Your interest: ${topic} Ask about the syllabus, level, format and schedule.`
     : 'Select a topic to give your admissions conversation a starting point.';
-  const message = `Hello Stock Axis Academy, I would like to ask about ${topic ? topic.title : 'your courses'}. Please share the confirmed syllabus, prerequisites, format, schedule and fees.`;
+  const message = `Hello Stock Axis Academy, I would like to ask about ${topic || 'your courses'}. Please share the confirmed syllabus, prerequisites, format, schedule and fees.`;
   if (whatsappLink) {
     const url = `https://wa.me/${validWhatsapp}?text=${encodeURIComponent(message)}`;
     whatsappLink.href = url;
