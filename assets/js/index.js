@@ -41,9 +41,12 @@ const content = {
   courses: [], // { id, title, level, description, subjects: [], duration, mode }
   mentor: null, // { name, role, bio } with client-approved text only
   draftTopics: [
-    { id: 'foundations', title: 'Start with the foundations.', level: 'The starting point', description: 'Explore the language of the market, how exchanges work, and the difference between trading and investing.', subjects: ['Market terminology', 'How markets work', 'Trading & investing'] },
-    { id: 'chart-reading', title: 'Look beyond the price.', level: 'A closer look', description: 'Get familiar with price charts, candlestick structure, and the questions a chart can help you ask.', subjects: ['Chart structure', 'Candlestick concepts', 'Context & observation'] },
-    { id: 'risk-awareness', title: 'Put risk in perspective.', level: 'The essential lens', description: 'Consider uncertainty, position sizing concepts, and the role of a considered decision-making process.', subjects: ['Risk & uncertainty', 'Position sizing concepts', 'Decision discipline'] }
+    { id: 'options-trading', title: 'Options Trading', description: 'Explore derivatives, options-market mechanics, trading strategies and risk management.', subjects: [] },
+    { id: 'equity-markets', title: 'Equity Markets', description: 'Understand listed companies, market movements, and short- and long-term equity investing.', subjects: [] },
+    { id: 'mutual-funds-sips', title: 'Mutual Funds & SIPs', description: 'Learn about mutual fund categories, systematic investment plans, costs, risk and long-term investing principles.', subjects: [] },
+    { id: 'bonds-etfs', title: 'Bonds & ETFs', description: 'Explore fixed-income instruments, exchange-traded funds and alternative ways to access financial markets.', subjects: [] },
+    { id: 'forex-commodities', title: 'Forex & Commodities', description: 'Understand currency pairs and commodity markets, including gold, silver, crude oil and natural gas.', subjects: [] },
+    { id: 'cryptocurrency-markets', title: 'Cryptocurrency Markets', description: 'Explore digital-asset markets, cryptocurrency pairs, volatility and associated risks.', subjects: [] }
   ]
 };
 
@@ -429,12 +432,15 @@ topics.forEach((course, index) => {
   article.dataset.aos = 'fade-up';
   article.append(make('span', 'course-number', String(index + 1).padStart(2, '0')));
   const heading = make('div', 'course-heading');
-  heading.append(make('span', 'technical-label', course.level), make('h3', '', course.title));
+  if (course.level) heading.append(make('span', 'technical-label', course.level));
+  heading.append(make('h3', '', course.title));
   const description = make('div', 'course-description');
   description.append(make('p', '', course.description));
-  const subjects = make('ul', 'course-subjects');
-  course.subjects.forEach((subject) => subjects.append(make('li', '', subject)));
-  description.append(subjects);
+  if (course.subjects?.length) {
+    const subjects = make('ul', 'course-subjects');
+    course.subjects.forEach((subject) => subjects.append(make('li', '', subject)));
+    description.append(subjects);
+  }
   if (!content.reviewMode && course.duration && course.mode) description.append(make('p', 'content-note', `${course.duration} · ${course.mode}`));
   const link = make('a', 'course-cta', '↗');
   link.href = '#contact';
