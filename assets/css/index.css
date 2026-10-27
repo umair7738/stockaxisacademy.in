@@ -806,7 +806,7 @@ nav>a:hover::after,nav>a[aria-current="location"]::after {
   margin:0;
   padding:0;
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(3,1fr);
   gap:26px
 }
 
@@ -835,6 +835,10 @@ nav>a:hover::after,nav>a[aria-current="location"]::after {
   color:var(--muted);
   background:var(--base);
   padding-left:8px
+}
+
+.journey-steps li:nth-child(3)::after {
+  display:none
 }
 
 .step-number {
@@ -1455,11 +1459,7 @@ details[open] summary {
     max-width:240px
   }
   .journey-steps {
-    grid-template-columns:repeat(3,1fr);
     gap:23px
-  }
-  .journey-steps li:nth-child(3)::after {
-    display:none
   }
   .journey-steps h3 {
     font-size:22px
